@@ -33,7 +33,8 @@
   <script>
     async function sendNews() {
       try {
-        const response = await fetch('https://your-n8n-domain/webhook/telegram-news', {
+        const response = await fetch('fetch('https://your-n8n-service-name.onrender.com/webhook/telegram-news')
+', {
           method: 'POST'
         });
         if (response.ok) {
