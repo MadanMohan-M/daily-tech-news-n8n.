@@ -31,7 +31,7 @@
         -200,
         -100
       ],
-      "id": "d13496ea-fe2b-4330-b072-e919d59d9425",
+      "id": "={{$env.TELEGRAM_BOT_TOKEN}}",
       "name": "Schedule Trigger"
     },
     {
