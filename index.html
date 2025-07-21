@@ -1,28 +1,80 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Send Tech News</title>
-  </head>
-  <body>
-    <h1>📨 Send Today’s Tech News</h1>
-    <button onclick="sendNews()">Send News to Telegram</button>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Daily Tech News Sender</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
 
-    <script>
-      function sendNews() {
-        fetch('https://madan22.app.n8n.cloud/webhook/telegram-news', {
-          method: 'POST'
-        })
-        .then(response => {
-          if (response.ok) {
-            alert('News sent to Telegram!');
-          } else {
-            alert('Failed to send. Check webhook URL or workflow.');
-          }
-        })
-        .catch(error => {
-          alert('Error: ' + error);
-        });
-      }
-    </script>
-  </body>
+    .container {
+      background-color: #ffffff;
+      padding: 30px 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-size: 24px;
+      color: #333333;
+    }
+
+    button {
+      padding: 12px 24px;
+      background-color: #0066cc;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    button:hover {
+      background-color: #004c99;
+    }
+
+    .message {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Send Today's Tech News</h1>
+    <button onclick="sendNews()">Send News to Telegram</button>
+    <div class="message" id="message"></div>
+  </div>
+
+  <script>
+    function sendNews() {
+      fetch('https://madan22.app.n8n.cloud/webhook-test/telegram-news', {
+        method: 'POST'
+      })
+      .then(response => {
+        const messageBox = document.getElementById('message');
+        if (response.ok) {
+          messageBox.textContent = 'News successfully sent to Telegram.';
+        } else {
+          messageBox.textContent = 'Failed to send. Check your webhook URL or n8n workflow.';
+        }
+      })
+      .catch(error => {
+        document.getElementById('message').textContent = 'Error: ' + error;
+      });
+    }
+  </script>
+</body>
 </html>
