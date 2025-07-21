@@ -1,0 +1,149 @@
+{
+  "name": "telegram",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "telegram-news"
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -200,
+        100
+      ],
+      "id": "webhook-trigger-node",
+      "name": "Webhook Trigger"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 7
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -200,
+        -100
+      ],
+      "id": "d13496ea-fe2b-4330-b072-e919d59d9425",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "url": "https://newsapi.org/v2/top-headlines?country=in&category=technology&apiKey=9580f1de358e4b7190252b36172aae32",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "ab2a66ce-acdd-4deb-b33c-d09ae9d393a8",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "jsCode": "// This formats the top 3 news articles into a message string for Telegram\nconst articles = $input.item.json.articles.slice(0, 3);\nlet message = '*📰 Today\\'s Tech Headlines:*\\n\\n';\n\nfor (const article of articles) {\n  message += `• [${article.title}](${article.url})\\n`;\n}\n\nreturn {\n  json: {\n    chat_id: '7620379884',\n    text: message,\n    parse_mode: 'Markdown'\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        200,
+        0
+      ],
+      "id": "4d2ebce1-c8cd-4868-8a5a-b3c526ddb6e2",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.telegram.org/bot7861876702:AAHxFg-E9cJBFMEaj0iqoq_UhGJBk_fWYI4/sendMessage",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "chat_id",
+              "value": "={{$json[\"chat_id\"]}}"
+            },
+            {
+              "name": "text",
+              "value": "={{$json[\"text\"]}}"
+            },
+            {
+              "name": "parse_mode",
+              "value": "={{$json[\"parse_mode\"]}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        400,
+        0
+      ],
+      "id": "86f3ae0d-fc09-4b79-af0d-fdf27f52a5de",
+      "name": "Send to Telegram"
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Send to Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "v2-telegram-news",
+  "id": "telegram-news-project"
+}
