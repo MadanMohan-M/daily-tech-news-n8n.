@@ -1,51 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Daily Tech News</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 50px;
-      background-color: #f9f9f9;
-      text-align: center;
-    }
-    button {
-      padding: 12px 24px;
-      font-size: 16px;
-      background-color: #0088cc;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #0077b3;
-    }
-  </style>
-</head>
-<body>
-  <h1>🚀 Send Today's Tech News</h1>
-  <p>Click the button below to send the latest tech news to your Telegram.</p>
-  <button onclick="sendNews()">Send to Telegram</button>
+<html>
+  <head>
+    <title>Send Tech News</title>
+  </head>
+  <body>
+    <h1>📨 Send Today’s Tech News</h1>
+    <button onclick="sendNews()">Send News to Telegram</button>
 
-  <script>
-    async function sendNews() {
-      try {
-        const response = await fetch('fetch('https://your-n8n-service-name.onrender.com/webhook/telegram-news')
-', {
+    <script>
+      function sendNews() {
+        fetch('https://n8n-yourproject.onrender.com/webhook/telegram-news', {
           method: 'POST'
+        })
+        .then(response => {
+          if (response.ok) {
+            alert('News sent to Telegram!');
+          } else {
+            alert('Failed to send. Check webhook URL or workflow.');
+          }
+        })
+        .catch(error => {
+          alert('Error: ' + error);
         });
-        if (response.ok) {
-          alert("✅ News sent successfully to Telegram!");
-        } else {
-          alert("❌ Failed to send. Check if your n8n is running.");
-        }
-      } catch (error) {
-        alert("❌ Error: " + error.message);
       }
-    }
-  </script>
-</body>
+    </script>
+  </body>
 </html>
